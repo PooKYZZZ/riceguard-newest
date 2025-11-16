@@ -1,258 +1,436 @@
-# RiceGuard
+# 🌾 RiceGuard
 
-RiceGuard is Team 27's multi-platform project for detecting rice leaf diseases. The FastAPI backend, React web portal, and Expo mobile companion reuse a shared TensorFlow model and MongoDB Atlas persistence.
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)
+[![License](https://img.shields.io/badge/license-Educational%20Use-orange.svg)
 
-## Overview
-- Backend handles classification, JWT auth, upload storage, and scan history.
-- Web app uploads scans and surfaces treatment recommendations.
-- Mobile app runs on-device TFLite with optional backend sync.
-- Academic capstone for CPE025 (Software Design) and CPE026 (Emerging Technologies 3). Advisers: Engr. Neal Barton James Matira and Engr. Robin Valenzuela.
+> **Multi-platform rice leaf disease detection system** built with FastAPI, React, and TensorFlow. Detect rice plant diseases through AI-powered image analysis and get treatment recommendations.
 
-## Stack & Layout
+---
 
-| Layer | Technologies |
-| --- | --- |
-| Backend | FastAPI, Uvicorn, Pydantic, python-jose, passlib, pymongo |
-| Frontend | React, React Router DOM, Axios, **Tailwind CSS v3**, CRACO |
-| Mobile | React Native (Expo), TensorFlow Lite |
-| ML | TensorFlow/Keras, NumPy, Pillow |
-| Infrastructure | MongoDB Atlas, JWT auth, local uploads storage |
+## Table of Contents
 
-```
-riceguard/
-|- backend/   # FastAPI API, auth, scan history, recommendations
-|- frontend/  # React web interface for uploads and history
-|- ml/        # Shared ML artifacts and preprocessing helpers
-```
+- [Quick Start](#-quick-start)
+- [Development Workflow](#-development-workflow)
+- [Architecture](#-architecture)
+- [Key Commands](#-key-commands)
+- [OpenSpec Integration](#-openspec-integration)
+- [Contributing](#-contributing)
+- [Troubleshooting](#-troubleshooting)
+- [License](#license)
 
-## Quickstart
+---
 
-### Backend API
+## 🚀 Quick Start
+
+Get RiceGuard running in under 5 minutes with our all-in-one development runner:
 
 ```bash
-cd backend
+# 1️⃣ Clone the repository
+git clone <repository-url>
+cd rice
+
+# 2️⃣ Run full development stack (Backend + Frontend)
+python dev_runner.py
+```
+
+That's it! The development runner will:
+- ✅ Set up virtual environments
+- ✅ Install all dependencies  
+- ✅ Start FastAPI backend on `http://127.0.0.1:8000`
+- ✅ Start React frontend on `http://localhost:3000`
+- ✅ Configure CORS and file uploads
+
+### 📱 Mobile Development
+
+```bash
+# Install Expo CLI (once globally)
+npm install -g @expo/cli
+
+# Navigate to mobile app
+cd riceguard/mobileapp/riceguard
+npm install
+
+# Configure for LAN development (replace with your PC IP)
+export EXPO_PUBLIC_API_BASE_URL="http://192.168.1.100:8000/api/v1"
+export REACT_NATIVE_PACKAGER_HOSTNAME="192.168.1.100"
+
+# Start Expo development server
+npx expo start --lan
+```
+
+> **🔧 Pro Tip**: Run `python dev_runner.py --help` for advanced options like tunnel mode, specific ports, and development modes.
+
+---
+
+## ⚙️ Development Workflow
+
+### Core Commands
+
+```bash
+# Full development stack
+python dev_runner.py                    # Backend + Frontend
+
+# Individual services
+cd riceguard/backend && python -m uvicorn app.main:app --reload
+cd riceguard/frontend && npm start
+cd riceguard/mobileapp/riceguard && npx expo start
+
+# Testing
+cd riceguard/backend && python -m pytest
+cd riceguard/frontend && npm test
+
+# Code quality
+cd riceguard/backend && python -m black app/
+cd riceguard/frontend && npm run lint
+```
+
+### Environment Setup
+
+**Backend (FastAPI)**
+```bash
+cd riceguard/backend
 python -m venv .venv
-. .\.venv\Scripts\Activate.ps1  # Windows PowerShell
+source .venv/bin/activate  # macOS/Linux
+# .venv\Scripts\Activate.ps1  # Windows
 pip install -r requirements.txt
 ```
 
-Create `backend/.env`:
+**Frontend (React + Tailwind CSS v3)**
+```bash
+cd riceguard/frontend
+npm install
+npm start          # Development server
+npm run build      # Production build
+```
 
+### 🔧 Configuration Files
+
+Create these environment files (examples in `.env.example`):
+
+**Backend (`riceguard/backend/.env`)**
 ```env
-MONGO_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/riceguard_db
+MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/riceguard_db
 DB_NAME=riceguard_db
-JWT_SECRET=CHANGE_ME_SUPER_SECRET
-JWT_ALGORITHM=HS256
+JWT_SECRET=your-super-secret-key
 TOKEN_EXPIRE_HOURS=6
 UPLOAD_DIR=uploads
 MAX_UPLOAD_MB=8
-ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173
 ```
 
-Place the trained TensorFlow model at `backend/ml/model.h5`, then run:
-
-```bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-Health check: `http://127.0.0.1:8000/health`  
-Docs: `http://127.0.0.1:8000/docs`
-
-### Frontend Web
-
-```bash
-cd frontend
-npm install
-```
-
-Create `frontend/.env`:
-
+**Frontend (`riceguard/frontend/.env`)**
 ```env
 REACT_APP_API_URL=http://127.0.0.1:8000/api/v1
 ```
 
-Start the dev server with `npm start` and open `http://localhost:3000`.
+---
 
-### Tailwind CSS v3 Implementation
+## 🏗️ Architecture
 
-The frontend has been upgraded to use **Tailwind CSS v3** with a comprehensive design system:
+### Tech Stack
 
-#### Custom Design System
-- **Rice-themed color palette**: Custom primary (blue) and secondary (green) color schemes
-- **Disease-specific colors**: Visual indicators for different disease states
-- **Glass morphism effects**: Modern UI with backdrop blur and transparency
-- **Custom animations**: Smooth transitions and micro-interactions
-- **Responsive design**: Mobile-first approach with breakpoint utilities
+| Layer | Technologies | Purpose |
+|------|-------------|---------|
+| **Backend** | FastAPI, Uvicorn, Pydantic | REST API, Authentication, ML Integration |
+| **Frontend** | React 19, Tailwind CSS v3, Axios | Web Interface, Image Upload, Results Display |
+| **Mobile** | React Native (Expo), TensorFlow Lite | On-device Scanning, Offline Support |
+| **Database** | MongoDB Atlas | User Data, Scan History, Recommendations |
+| **ML** | TensorFlow/Keras, NumPy, Pillow | Disease Classification, Image Processing |
+| **Infrastructure** | JWT Auth, CORS, File Upload | Security, Cross-origin Support |
 
-#### Configuration Files
-- `tailwind.config.js`: Custom theme configuration with rice-themed colors
-- `postcss.config.js`: PostCSS configuration for Tailwind processing
-- `craco.config.js`: Create React App customization for Tailwind integration
-- `src/index.css`: Global styles with custom component classes
+### Project Structure
 
-#### Key Features
-- **Accessibility**: ARIA labels, keyboard navigation, focus management
-- **Performance**: Optimized bundle size with PurgeCSS
-- **Responsive**: Adaptive layouts for all device sizes
-- **Modern UI**: Cards, buttons, gradients, and interactive elements
-
-#### Development Workflow
-```bash
-# Tailwind CSS is automatically processed during build
-npm start    # Development with hot reload
-npm run build    # Production build with optimized CSS
+```
+riceguard/
+├── backend/                 # FastAPI application
+│   ├── app/
+│   │   ├── api/v1/        # API routes (auth, scans, recommendations)
+│   │   ├── core/          # Configuration, database, security
+│   │   ├── models/        # Pydantic models
+│   │   ├── services/      # ML service, business logic
+│   │   └── main.py        # FastAPI app entry point
+│   ├── tests/              # Backend tests
+│   ├── uploads/            # File upload storage
+│   └── ml/                 # TensorFlow models
+├── frontend/               # React web application
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── pages/         # Page components
+│   │   └── services/      # API integration
+│   ├── public/             # Static assets
+│   └── tailwind.config.js # Tailwind CSS configuration
+├── mobileapp/riceguard/     # Expo mobile app
+│   ├── src/
+│   │   ├── components/    # React Native components
+│   │   ├── screens/       # App screens
+│   │   └── navigation/    # App navigation
+│   └── assets/             # Mobile assets
+└── openspec/               # Specifications (see OpenSpec Integration)
 ```
 
-### Mobile App (Expo)
+### Key Features
 
-The mobile app uses Expo (React Native). You can run it on a **real device** (recommended) or an emulator/simulator.
+- **🤖 AI-Powered Detection**: TensorFlow models classify rice leaf diseases with confidence scores
+- **📊 Multi-Platform**: Web, iOS, and Android apps share the same backend
+- **🔒 Secure Authentication**: JWT-based auth with proper token management
+- **📱 Offline Support**: Mobile app works offline with on-device ML models
+- **📈 Treatment Recommendations**: Disease-specific treatment guidance
+- **🎨 Modern UI**: Tailwind CSS v3 with rice-themed design system
 
-#### 1) Install deps
+---
 
-```bash
-cd mobileapp/riceguard
-npm install
-```
+## ⚡ Key Commands
 
-#### 2) Point the app to your backend
-
-> Use the **PC's LAN IP** (where FastAPI runs), not your phone's IP.
-
-* Start the backend bound to all interfaces:
-
-  ```bash
-  # from backend/
-  uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-  ```
-
-* On your phone's browser, verify it reaches the backend:
-
-  ```
-  http://<PC_IP>:8000/health
-  ```
-
-  You should see JSON.
-
-* In the terminal where you'll start Expo, set the API base URL (for dev):
-
-  ```bash
-  # PowerShell (Windows)
-  $env:EXPO_PUBLIC_API_BASE_URL="http://<PC_IP>:8000/api/v1"
-
-  # bash/zsh (macOS/Linux)
-  export EXPO_PUBLIC_API_BASE_URL="http://<PC_IP>:8000/api/v1"
-  ```
-
-> For the **Android emulator**, use `http://10.0.2.2:8000/api/v1`.
-> For the **iOS simulator**, use `http://127.0.0.1:8000/api/v1`.
-
-#### 3) Start Metro (Expo dev server)
-
-**Real device over LAN (recommended):**
+### Backend Development
 
 ```bash
-# Force Metro to advertise the correct IP and clear cache
-# Windows PowerShell:
-$env:REACT_NATIVE_PACKAGER_HOSTNAME="<PC_IP>"
-npx expo start --lan --clear
+# Development server
+cd riceguard/backend
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-# macOS/Linux:
-REACT_NATIVE_PACKAGER_HOSTNAME="<PC_IP>" npx expo start --lan --clear
+# Database operations
+python -m pytest backend/tests/
+python seed.py              # Seed database with recommendations
+
+# ML operations
+python tools/check_model.py  # Verify ML model status
 ```
 
-Scan the QR with **Expo Go** on your phone. The banner should show:
-
-```
-exp://<PC_IP>:8081
-```
-
-**If LAN is flaky:** use a tunnel (slower but zero config)
+### Frontend Development
 
 ```bash
-npx expo start --tunnel --clear
+# Development
+cd riceguard/frontend
+npm start                   # Dev server on :3000
+
+# Build & Test
+npm run build               # Production build
+npm test                     # Run tests
+npm run lint                 # Code linting
+
+# Tailwind CSS development
+npm run dev:tailwind         # Watch CSS changes
 ```
 
-#### 4) Permissions (image picker)
+### Mobile Development
 
-The first time you scan, the app will request photo library permissions. Accept the prompt.
+```bash
+# Start Expo development server
+cd riceguard/mobileapp/riceguard
+npx expo start
 
-#### 5) CORS (only if you test with the web preview)
+# Build for production
+npx expo build
 
-If you also open the Expo **Web** tab in a browser, add those origins to `backend/.env`:
-
+# Run on device/emulator
+npx expo run android
+npx expo run ios
 ```
-ALLOWED_ORIGINS=http://localhost:8081,http://127.0.0.1:8081,http://<PC_IP>:8081
+
+### Testing & Quality
+
+```bash
+# Run all tests
+python -m pytest backend/tests/ && cd frontend && npm test
+
+# Backend health check
+curl http://127.0.0.1:8000/health
+
+# Linting and formatting
+cd backend && python -m black app/ && cd ../frontend && npm run lint
 ```
 
-Restart the backend.
+---
 
-#### 6) Common Windows notes
+## 📋 OpenSpec Integration
 
-* Allow these ports in **Windows Firewall**: **8000** (backend), **8081** (Metro), **19000/19001/19002** (Expo).
-* Disable VPNs or virtual adapters that might hijack routing (Hyper-V/VirtualBox/VMware) or use `--tunnel`.
+This project uses **OpenSpec** for specification-driven development. When making changes:
 
-#### 7) Run it
+### 🔄 Creating New Features
+1. **Check existing specs**: `openspec list --specs`
+2. **Create change proposal**: `openspec new change-feature-name`
+3. **Write specifications**: Detailed requirements with scenarios
+4. **Validate**: `openspec validate change-feature-name --strict`
+5. **Get approval** before implementation
 
-* Open **Expo Go** on your phone and scan the QR.
-* Create an account on the **Sign Up** modal -> Log in -> Go to **Scan** -> pick an image.
+### 🐛 Direct Fixes (No Proposal Needed)
+- Bug fixes restoring intended behavior
+- Typos, formatting, documentation
+- Non-breaking dependency updates
+- Configuration improvements
 
-#### Troubleshooting quick checks
+### 📚 Available Commands
+```bash
+openspec list                  # List active changes
+openspec list --specs          # List specifications
+openspec show <spec>           # View specification details
+openspec validate <change>     # Validate change proposal
+openspec archive <change>      # Mark change as complete
+```
 
-* **Phone can't reach backend**
+### 📖 Key Files
+- `openspec/project.md` - Project conventions
+- `openspec/AGENTS.md` - Complete workflow guide
+- `openspec/specs/` - Current specifications
+- `openspec/changes/` - Proposed changes
 
-  * Make sure backend runs with `--host 0.0.0.0`.
-  * Phone browser to `http://<PC_IP>:8000/health` should load.
-  * Open Firewall for TCP 8000 (Private network).
+---
 
-* **Expo Go shows "Failed to download remote update"**
+## 🤝 Contributing
 
-  * Metro must advertise the **PC IP** (`REACT_NATIVE_PACKAGER_HOSTNAME=<PC_IP>`).
-  * Try `npx expo start --lan --clear` or `--tunnel`.
-  * Open Firewall for 8081/19000/19001/19002.
+We welcome contributions from the community! Here's how to get started:
 
-* **Web (browser) can't log in (OPTIONS 400)**
+### 🌟 Development Process
 
-  * CORS allowlist missing. Add the exact origin (scheme+host+port) to `ALLOWED_ORIGINS` and restart.
+1. **Fork the repository** and create a feature branch
+2. **Set up your environment** using the quick start guide
+3. **Make your changes** with our coding standards
+4. **Add tests** for new functionality
+5. **Ensure all tests pass** before submitting
 
-#### Scripts cheat-sheet (Windows PowerShell)
+### 📝 Branching Strategy
 
-```powershell
-# Backend
+```bash
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Make changes and test
+# ... development work ...
+
+# Push and create PR
+git push origin feature/your-feature-name
+```
+
+### 🔧 Code Style
+
+- **Python**: Follow PEP 8, use `black` for formatting
+- **JavaScript/React**: Use ES6+ features, follow React conventions
+- **Git**: Use conventional commits (`feat:`, `fix:`, `docs:`, etc.)
+
+### 📋 Pull Request Requirements
+
+- [ ] **Clear title and description** explaining the change
+- [ ] **Tests pass** for all affected functionality
+- [ ] **Code follows style guidelines**
+- [ ] **Documentation updated** if needed
+- [ ] **No secrets or sensitive data** committed
+
+### 👥 Suggested Reviewers
+
+- **Backend changes**: Request review from backend team members
+- **Frontend changes**: Request review from frontend developers  
+- **ML changes**: Request review from ML specialists
+- **Architecture changes**: Request review from tech lead
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### ❌ **Uvicorn Import Error**
+```bash
+# Wrong command (fails):
+uvicorn main:app --reload
+
+# Correct command:
+uvicorn app.main:app --reload
+# Or:
+python -m uvicorn app.main:app --reload
+```
+
+#### ⚠️ **TensorFlow Loading Issues**
+```bash
+# Check ML model status
 cd backend
-python -m venv .venv
-. .\.venv\Scripts\Activate.ps1
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+python -c "from app.services.ml_service import classifier; print(classifier.get_service_health())"
 
-# Mobile (in a new terminal)
-cd mobileapp\riceguard
-$env:EXPO_PUBLIC_API_BASE_URL="http://<PC_IP>:8000/api/v1"
-$env:REACT_NATIVE_PACKAGER_HOSTNAME="<PC_IP>"
-npx expo start --lan --clear
+# Fallback mode will work without TensorFlow
 ```
 
-Replace `<PC_IP>` with your actual PC IPv4 (e.g., `192.168.31.150`).
+#### 🔌 **CORS Errors**
+```bash
+# Add your origin to ALLOWED_ORIGINS in backend/.env
+ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://your-ip:3000
+```
 
-## API Cheatsheet
+#### 📱 **Mobile App Connection Issues**
+```bash
+# Test backend connectivity
+curl http://<PC_IP>:8000/health
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `POST` | `/api/v1/auth/register` | Create a user account |
-| `POST` | `/api/v1/auth/login` | Returns `{ accessToken, expiresAt, user }` |
-| `POST` | `/api/v1/scans` | Upload a scan (`file`, `notes`, `modelVersion`) and classify |
-| `GET` | `/api/v1/scans` | Fetch scans for the authenticated user |
-| `GET` | `/api/v1/recommendations/{diseaseKey}` | Retrieve treatment guidance |
+# Check Expo configuration
+echo $EXPO_PUBLIC_API_BASE_URL  # Should show your backend URL
+echo $REACT_NATIVE_PACKAGER_HOSTNAME  # Should show your PC IP
+```
 
-Use `Authorization: Bearer <accessToken>` for protected endpoints.
+### 🐞 Development Environment Issues
 
-## ML Assets
+#### **Python Version**
+- **Required**: Python 3.11+
+- **Check**: `python --version`
+- **Install**: Use pyenv, conda, or official Python installer
 
-- Train models in TensorFlow/Keras, export `.h5` for the backend and `.tflite` for mobile.
-- Keep preprocessing consistent (`backend/ml_service.py`).
-- Large binaries (`model.h5`, `.tflite`) remain untracked; distribute separately.
+#### **Node.js Version**  
+- **Required**: Node.js 16+ for Expo
+- **Check**: `node --version`
+- **Install**: Use nvm or official Node.js installer
 
-## Team 27
+#### **MongoDB Connection**
+```bash
+# Test connection
+cd backend
+python -c "from app.core.database import get_db; print('MongoDB connected')"
+```
 
-- **Mark Angelo Aquino** - Team Lead
-- **Faron Jabez Nonan** - Frontend
-- **Froilan Gayao** - Backend
-- **Eugene Dela Cruz** - ML
+### 📞 Getting Help
+
+- **Check existing issues**: Look at GitHub Issues and Discussions
+- **Team Communication**: Contact team members through project channels
+- **Documentation**: Check `CLAUDE.md` and `openspec/AGENTS.md` for detailed guides
+
+### 🔍 Debug Mode
+
+Enable debug logging by setting environment variable:
+```bash
+export LOG_LEVEL=DEBUG
+python dev_runner.py
+```
+
+---
+
+## 📜 License
+
+This project is licensed under the **Educational Use License** for academic capstone projects (CPE025/CPE026).
+
+### 🎓 Academic Use
+
+- ✅ **Educational institutions** may use for teaching and research
+- ✅ **Students** may use for learning and assignments  
+- ✅ **Modifications allowed** for educational purposes
+- ❌ **Commercial use** without explicit permission
+- ❌ **Redistribution** of proprietary components
+
+### 🏫 Acknowledgements
+
+**Team 27** - Computer Engineering Capstone Project
+- **Mark Angelo Aquino** - Team Lead & Backend Development
+- **Faron Jabez Nonan** - Frontend Development
+- **Froilan Gayao** - Backend Development & Integration
+- **Eugene Dela Cruz** - Machine Learning & Model Development
+
+**Advisors**
+- **Engr. Neal Barton James Matira**
+- **Engr. Robin Valenzuela**
+
+**University**: College of Engineering Education, 2nd Floor, A. Luna Building
+
+---
+
+<div align="center">
+
+**🌾 Empowering farmers with AI-powered rice disease detection**
+
+[![Built with ❤️ for Rice Farmers](https://img.shields.io/badge/built%20with%20❤️%20for%20Rice%20Farmers-orange.svg)]
+
+</div>
