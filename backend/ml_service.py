@@ -17,10 +17,15 @@ try:
     from tensorflow.keras.models import load_model
     import numpy as np
     from PIL import Image
+    try:
+        from tensorflow.keras.applications.resnet50 import preprocess_input as resnet50_preprocess
+    except Exception:  # pragma: no cover - optional depending on model family
+        resnet50_preprocess = None
 
     TF_OK = True
 except Exception:  # pragma: no cover - runtime availability guard
     TF_OK = False
+    resnet50_preprocess = None
 
 
 # ---------------- Paths ---------------- #
@@ -81,7 +86,11 @@ def _preprocess(image_path: str) -> "np.ndarray":
     Resize to IMG_SIZE x IMG_SIZE, scale to 0-1, and add batch dimension.
     """
     img = Image.open(image_path).convert("RGB").resize((IMG_SIZE, IMG_SIZE))
-    arr = np.asarray(img, dtype="float32") / 255.0
+    arr = np.asarray(img, dtype="float32")
+    if resnet50_preprocess:
+        arr = resnet50_preprocess(arr)
+    else:
+        arr /= 255.0
     arr = np.expand_dims(arr, axis=0)  # (1, H, W, 3)
     return arr
 
