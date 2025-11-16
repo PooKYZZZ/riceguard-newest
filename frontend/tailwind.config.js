@@ -2,6 +2,7 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
+    "./public/index.html",
   ],
   theme: {
     extend: {
@@ -31,10 +32,24 @@ module.exports = {
           900: '#14532d',
         },
         'disease': {
-          'healthy': '#22c55e',
-          'bacterial': '#ef4444',
-          'brown': '#f59e0b',
-          'smut': '#8b5cf6',
+          'healthy': '#16a34a',
+          'bacterial': '#dc2626',
+          'brown': '#d97706',
+          'smut': '#9333ea',
+        },
+        'farm': {
+          'soil': '#8B4513',
+          'leaf': '#228B22',
+          'sun': '#FFD700',
+          'water': '#4682B4',
+          'harvest': '#DAA520',
+        },
+        'outdoor': {
+          'high-contrast': '#000000',
+          'sun-readable': '#FFFFFF',
+          'shadow': '#808080',
+          'warning': '#FF6B35',
+          'success': '#00A878',
         }
       },
       animation: {

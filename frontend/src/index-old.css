@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    @apply bg-gray-50 text-gray-900;
+    @apply selection:bg-rice-primary-100 selection:text-rice-primary-900;
+  }
+
+  /* Remove text caret animation as in original */
+  * {
+    caret-color: transparent;
+  }
+
+  /* Enhanced focus styles for outdoor tablet use */
+  *:focus {
+    @apply outline-none;
+  }
+
+  *:focus-visible {
+    @apply ring-4 ring-rice-primary-500 ring-offset-4 ring-offset-white;
+    @apply rounded-lg;
+    /* Extra contrast for outdoor visibility */
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.3), 0 0 0 8px rgba(255, 255, 255, 0.8);
+  }
+
+  /* High contrast mode for outdoor use */
+  @media (prefers-contrast: high) {
+    *:focus-visible {
+      @apply ring-4 ring-outdoor-high-contrast ring-offset-4 ring-offset-outdoor-sun-readable;
+    }
+  }
+
+  /* Screen reader only content */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/20 backdrop-blur-lg border border-white/30;
+  }
+
+  .glass-dark {
+    @apply bg-gray-900/20 backdrop-blur-lg border border-gray-700/30;
+  }
+
+  /* Enhanced button system for agricultural use */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-4 text-base font-semibold rounded-xl;
+    @apply transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-4 focus:ring-offset-4;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+    @apply min-h-[52px] min-w-[52px]; /* Larger touch targets for field work */
+    /* High contrast text for outdoor readability */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.025em;
+  }
+
+  /* Field-ready button with enhanced visibility */
+  .btn-field {
+    @apply btn px-8 py-4 text-lg font-bold rounded-xl;
+    @apply shadow-lg hover:shadow-xl active:shadow-md;
+    @apply transform hover:scale-[1.02] active:scale-[0.98];
+    /* Enhanced contrast for outdoor use */
+    border: 2px solid transparent;
+  }
+
+  .btn-field-primary {
+    @apply btn-field bg-rice-primary-600 text-outdoor-sun-readable hover:bg-rice-primary-700;
+    @apply focus:ring-rice-primary-500;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-field-secondary {
+    @apply btn-field bg-outdoor-sun-readable text-outdoor-high-contrast hover:bg-gray-50;
+    @apply focus:ring-rice-primary-500 border-outdoor-shadow/30;
+  }
+
+  .btn-field-success {
+    @apply btn-field bg-outdoor-success text-outdoor-sun-readable hover:bg-outdoor-success/90;
+    @apply focus:ring-outdoor-success;
+  }
+
+  .btn-field-warning {
+    @apply btn-field bg-outdoor-warning text-outdoor-sun-readable hover:bg-outdoor-warning/90;
+    @apply focus:ring-outdoor-warning;
+  }
+
+  .btn-primary {
+    @apply btn bg-rice-primary-600 text-white hover:bg-rice-primary-700 active:bg-rice-primary-800;
+    @apply focus:ring-rice-primary-500 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-gray-700 border border-gray-300 hover:bg-gray-50;
+    @apply focus:ring-rice-primary-500 shadow-sm hover:shadow-md;
+  }
+
+  .btn-success {
+    @apply btn bg-rice-secondary-600 text-white hover:bg-rice-secondary-700;
+    @apply focus:ring-rice-secondary-500 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700;
+    @apply focus:ring-red-500 shadow-lg hover:shadow-xl;
+  }
+
+  /* Card components with agricultural context */
+  .card {
+    @apply bg-white rounded-2xl shadow-lg border border-gray-100;
+    @apply p-6 transition-all duration-200 ease-in-out;
+    /* Enhanced contrast for outdoor use */
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .card-hover {
+    @apply card hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1;
+  }
+
+  /* Field-ready card for outdoor conditions */
+  .card-field {
+    @apply bg-white/90 rounded-2xl shadow-xl border-2 border-outdoor-shadow/20;
+    @apply p-6 transition-all duration-200 ease-in-out;
+    @apply backdrop-blur-md;
+  }
+
+  .card-disease {
+    @apply card-field border-l-4;
+  }
+
+  .card-disease-healthy {
+    @apply card-disease border-l-disease-healthy;
+  }
+
+  .card-disease-warning {
+    @apply card-disease border-l-outdoor-warning;
+  }
+
+  .card-disease-critical {
+    @apply card-disease border-l-disease-bacterial;
+  }
+
+  /* Input styles */
+  .input {
+    @apply w-full px-4 py-3 text-base border border-gray-300 rounded-xl;
+    @apply focus:outline-none focus:ring-2 focus:ring-rice-primary-500 focus:border-transparent;
+    @apply disabled:bg-gray-50 disabled:text-gray-500;
+    @apply min-h-[44px]; /* Touch-friendly */
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-rice-primary-600;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-rice {
+    @apply bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50;
+  }
+
+  .bg-gradient-dashboard {
+    @apply bg-gradient-to-br from-rice-primary-50 via-white to-rice-secondary-50;
+  }
+}
+
+/* Custom utility styles */
+@layer utilities {
+  /* Text shadow for better readability */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Custom animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  /* Safe areas for mobile */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Agricultural status indicators */
+  .status-indicator {
+    @apply inline-flex items-center px-4 py-2 rounded-full text-base font-bold;
+    @apply border-2 backdrop-blur-sm;
+    min-height: 48px;
+  }
+
+  .status-healthy {
+    @apply status-indicator bg-disease-healthy/10 text-disease-healthy border-disease-healthy/30;
+  }
+
+  .status-warning {
+    @apply status-indicator bg-disease-brown/10 text-disease-brown border-disease-brown/30;
+  }
+
+  .status-critical {
+    @apply status-indicator bg-disease-bacterial/10 text-disease-bacterial border-disease-bacterial/30;
+  }
+
+  /* Trust indicators for AI results */
+  .trust-badge {
+    @apply inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium;
+    @apply bg-gradient-to-r from-rice-primary-50 to-rice-secondary-50;
+    @apply border border-rice-primary-200;
+  }
+
+  .confidence-meter {
+    @apply relative w-full h-6 bg-gray-200 rounded-full overflow-hidden;
+    @apply border-2 border-gray-300;
+  }
+
+  .confidence-fill {
+    @apply h-full transition-all duration-700 ease-out;
+    @apply bg-gradient-to-r from-rice-primary-500 to-rice-secondary-500;
+    position: relative;
+  }
+
+  .confidence-fill::after {
+    content: '';
+    @apply absolute inset-0 bg-white/20 animate-pulse;
+  }
+
+  /* Step indicator for workflow */
+  .step-indicator {
+    @apply flex items-center space-x-4;
+  }
+
+  .step {
+    @apply flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg;
+    @apply border-3 border-outdoor-shadow bg-outdoor-sun-readable text-outdoor-high-contrast;
+    @apply transition-all duration-300;
+  }
+
+  .step-active {
+    @apply bg-rice-primary-600 text-outdoor-sun-readable border-rice-primary-600;
+    @apply shadow-lg transform scale-110;
+  }
+
+  .step-completed {
+    @apply bg-outdoor-success text-outdoor-sun-readable border-outdoor-success;
+  }
+
+  /* Accessibility utilities */
+  .skip-link {
+    @apply absolute -top-full left-0 bg-rice-primary-600 text-white px-6 py-3 rounded-lg;
+    @apply focus:top-4 focus:left-4 z-50 focus:outline-none focus:ring-4 focus:ring-white;
+    @apply font-bold text-lg min-h-[48px];
+  }
+
+  /* Touch-friendly touch targets */
+  .touch-target {
+    @apply min-h-[48px] min-w-[48px];
+  }
+
+  .touch-target-large {
+    @apply min-h-[60px] min-w-[60px];
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

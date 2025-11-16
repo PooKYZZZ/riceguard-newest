@@ -1,3 +1,6 @@
+import bgImage from '../assets/bg.jpg';
+
+export const historyPageStyles = `
 /* HistoryPage.css */
 
 .history-page {
@@ -5,14 +8,9 @@
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   color: #fff;
-  /* ✅ Fixed: Replaced missing bg.jpg with Tailwind gradient fallback */
-  background: linear-gradient(135deg, 
-    rgba(34, 197, 94, 0.8) 0%,     /* rice-secondary-500 */
-    rgba(21, 128, 61, 0.9) 25%,    /* rice-secondary-600 */
-    rgba(20, 83, 45, 0.9) 50%,     /* rice-secondary-700 */
-    rgba(16, 101, 74, 0.8) 75%,    /* rice-secondary-800 */
-    rgba(22, 163, 74, 0.7) 100%    /* rice-secondary-600 */
-  );
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    url('${bgImage}') no-repeat center center / cover;
   overflow-x: hidden;
 }
 
@@ -204,3 +202,4 @@
 .history-page .modal {
   width: min(400px, 90%);
 }
+`;

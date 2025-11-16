@@ -15,7 +15,7 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* ✅ Fixed background image (prevents scrolling) */
+/* ✅ Fixed background image with TailwindCSS fallback (prevents scrolling) */
 .bg-image {
   position: fixed;
   top: 0;
@@ -24,6 +24,14 @@ html, body, #root {
   height: 100%;
   object-fit: cover; 
   z-index: -1; /* Behind everything */
+  /* Emergency fallback: gradient background if image fails to load */
+  background: linear-gradient(135deg, 
+    rgba(34, 197, 94, 0.7) 0%,     /* rice-secondary-500 */
+    rgba(21, 128, 61, 0.8) 50%,    /* rice-secondary-600 */
+    rgba(16, 101, 74, 0.9) 100%    /* rice-secondary-800 */
+  );
+  /* Alternative solid color fallback */
+  background-color: #15803d; /* rice-secondary-700 */
 }
 
 /* Center content in viewport */
@@ -96,6 +104,8 @@ html, body, #root {
 body, .App {
   font-family: var(--app-font);
   background: transparent;
+  /* Ensure solid color fallback for entire app */
+  background-color: #14532d; /* rice-secondary-900 */
 }
 
 /* Actions (Login / Sign Up buttons) */

@@ -1,19 +1,15 @@
+import bgImage from '../assets/bg.jpg';
+
+export const scanPageStyles = `
 .scan-page {
   height: 100vh;
   width: 100%;
+  background: url('${bgImage}') no-repeat center center/cover;
   display: flex;
   flex-direction: column;
   color: #fff;
   font-family: 'Nunito', sans-serif;
   font-size: small;
-  /* Emergency fallback: agricultural gradient background */
-  background: linear-gradient(to-br, 
-    rgba(34, 197, 94, 0.6) 0%,     /* rice-secondary-500 */
-    rgba(21, 128, 61, 0.7) 50%,    /* rice-secondary-600 */
-    rgba(16, 101, 74, 0.8) 100%    /* rice-secondary-800 */
-  );
-  /* Solid color fallback */
-  background-color: #14532d; /* rice-secondary-900 */
 }
 
 /* Hide text caret to remove blinking cursor */
@@ -162,3 +158,4 @@
 .scan-page .modal {
   width: min(400px, 90%);
 }
+`;
