@@ -8,7 +8,7 @@ FRONTEND_DIR = REPO_ROOT / "frontend"
 
 # Backend
 BACKEND_PORT = "8000"
-BACKEND_APP = "main:app"
+BACKEND_APP = "app.main:app"
 # Use backend/.venv if present, else system Python
 VENV_PY = BACKEND_DIR / ".venv" / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
 
@@ -63,9 +63,17 @@ def _spawn(cmd, cwd, env=None, prefix="proc"):
 # ===== Backend starter =====
 def start_backend():
     python_bin = str(VENV_PY if VENV_PY.exists() else sys.executable)
-    cmd = [python_bin, "-m", "uvicorn", BACKEND_APP, "--reload", "--port", BACKEND_PORT]
-    print(f"→ Starting backend: {' '.join(cmd)}  (cwd={BACKEND_DIR})")
-    return _spawn(cmd, BACKEND_DIR, prefix="backend")
+
+    # Check if we're in production mode (no reload)
+    env = {}
+    if os.getenv("ENVIRONMENT") == "production":
+        cmd = [python_bin, "-m", "uvicorn", BACKEND_APP, "--port", BACKEND_PORT]
+        print(f"→ Starting backend in PRODUCTION mode: {' '.join(cmd)}  (cwd={BACKEND_DIR})")
+    else:
+        cmd = [python_bin, "-m", "uvicorn", BACKEND_APP, "--reload", "--port", BACKEND_PORT]
+        print(f"→ Starting backend in DEVELOPMENT mode: {' '.join(cmd)}  (cwd={BACKEND_DIR})")
+
+    return _spawn(cmd, BACKEND_DIR, env=env, prefix="backend")
 
 
 # ===== npm finder =====
@@ -151,6 +159,35 @@ def main():
     if not FRONTEND_DIR.exists():
         print(f"✗ Missing frontend dir: {FRONTEND_DIR}")
         return
+
+    # Check for .env file
+    env_file = BACKEND_DIR / ".env"
+    if not env_file.exists():
+        print(f"⚠️  Warning: .env file not found at {env_file}")
+        print("   Creating .env from .env.example...")
+        example_file = BACKEND_DIR / ".env.example"
+        if example_file.exists():
+            import shutil
+            shutil.copy(example_file, env_file)
+            print(f"✓ Created .env from .env.example")
+            print("   Please update the .env file with your configuration and restart.")
+            return
+        else:
+            print("   Please create a .env file with your configuration.")
+            return
+
+    # Set environment based on command line args or default to development
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "prod":
+            os.environ["ENVIRONMENT"] = "production"
+            print("🚀 Running in PRODUCTION mode")
+        elif sys.argv[1] == "test":
+            os.environ["ENVIRONMENT"] = "testing"
+            print("🧪 Running in TESTING mode")
+        else:
+            print("🔧 Running in DEVELOPMENT mode")
+    else:
+        print("🔧 Running in DEVELOPMENT mode (use 'python dev_runner.py prod' for production)")
 
     try:
         backend_proc = start_backend()
