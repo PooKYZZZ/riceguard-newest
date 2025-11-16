@@ -13,7 +13,7 @@ RiceGuard is Team 27's multi-platform project for detecting rice leaf diseases. 
 | Layer | Technologies |
 | --- | --- |
 | Backend | FastAPI, Uvicorn, Pydantic, python-jose, passlib, pymongo |
-| Frontend | React, React Router DOM, Axios, Tailwind CSS (optional) |
+| Frontend | React, React Router DOM, Axios, **Tailwind CSS v3**, CRACO |
 | Mobile | React Native (Expo), TensorFlow Lite |
 | ML | TensorFlow/Keras, NumPy, Pillow |
 | Infrastructure | MongoDB Atlas, JWT auth, local uploads storage |
@@ -72,6 +72,36 @@ REACT_APP_API_URL=http://127.0.0.1:8000/api/v1
 ```
 
 Start the dev server with `npm start` and open `http://localhost:3000`.
+
+### Tailwind CSS v3 Implementation
+
+The frontend has been upgraded to use **Tailwind CSS v3** with a comprehensive design system:
+
+#### Custom Design System
+- **Rice-themed color palette**: Custom primary (blue) and secondary (green) color schemes
+- **Disease-specific colors**: Visual indicators for different disease states
+- **Glass morphism effects**: Modern UI with backdrop blur and transparency
+- **Custom animations**: Smooth transitions and micro-interactions
+- **Responsive design**: Mobile-first approach with breakpoint utilities
+
+#### Configuration Files
+- `tailwind.config.js`: Custom theme configuration with rice-themed colors
+- `postcss.config.js`: PostCSS configuration for Tailwind processing
+- `craco.config.js`: Create React App customization for Tailwind integration
+- `src/index.css`: Global styles with custom component classes
+
+#### Key Features
+- **Accessibility**: ARIA labels, keyboard navigation, focus management
+- **Performance**: Optimized bundle size with PurgeCSS
+- **Responsive**: Adaptive layouts for all device sizes
+- **Modern UI**: Cards, buttons, gradients, and interactive elements
+
+#### Development Workflow
+```bash
+# Tailwind CSS is automatically processed during build
+npm start    # Development with hot reload
+npm run build    # Production build with optimized CSS
+```
 
 ### Mobile App (Expo)
 

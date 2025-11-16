@@ -1,7 +1,7 @@
 .scan-page {
   height: 100vh;
   width: 100%;
-  background: url("G:\Downloads\riceguard\frontend\public\bg.jpg") no-repeat center center/cover;
+  background: url('/bg.jpg') no-repeat center center/cover;
   display: flex;
   flex-direction: column;
   color: #fff;

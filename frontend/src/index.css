@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    @apply bg-gray-50 text-gray-900;
+    @apply selection:bg-rice-primary-100 selection:text-rice-primary-900;
+  }
+
+  /* Remove text caret animation as in original */
+  * {
+    caret-color: transparent;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus {
+    @apply outline-none;
+  }
+
+  *:focus-visible {
+    @apply ring-2 ring-rice-primary-500 ring-offset-2 ring-offset-white;
+    @apply rounded-md;
+  }
+
+  /* Screen reader only content */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/20 backdrop-blur-lg border border-white/30;
+  }
+
+  .glass-dark {
+    @apply bg-gray-900/20 backdrop-blur-lg border border-gray-700/30;
+  }
+
+  /* Button base styles */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl;
+    @apply transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+    @apply min-h-[44px] min-w-[44px]; /* Touch-friendly minimum size */
+  }
+
+  .btn-primary {
+    @apply btn bg-rice-primary-600 text-white hover:bg-rice-primary-700 active:bg-rice-primary-800;
+    @apply focus:ring-rice-primary-500 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-gray-700 border border-gray-300 hover:bg-gray-50;
+    @apply focus:ring-rice-primary-500 shadow-sm hover:shadow-md;
+  }
+
+  .btn-success {
+    @apply btn bg-rice-secondary-600 text-white hover:bg-rice-secondary-700;
+    @apply focus:ring-rice-secondary-500 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700;
+    @apply focus:ring-red-500 shadow-lg hover:shadow-xl;
+  }
+
+  /* Card components */
+  .card {
+    @apply bg-white rounded-2xl shadow-lg border border-gray-100;
+    @apply p-6 transition-all duration-200 ease-in-out;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1;
+  }
+
+  /* Input styles */
+  .input {
+    @apply w-full px-4 py-3 text-base border border-gray-300 rounded-xl;
+    @apply focus:outline-none focus:ring-2 focus:ring-rice-primary-500 focus:border-transparent;
+    @apply disabled:bg-gray-50 disabled:text-gray-500;
+    @apply min-h-[44px]; /* Touch-friendly */
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-rice-primary-600;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-rice {
+    @apply bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50;
+  }
+
+  .bg-gradient-dashboard {
+    @apply bg-gradient-to-br from-rice-primary-50 via-white to-rice-secondary-50;
+  }
+}
+
+/* Custom utility styles */
+@layer utilities {
+  /* Text shadow for better readability */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Custom animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  /* Safe areas for mobile */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Accessibility utilities */
+  .skip-link {
+    @apply absolute -top-full left-0 bg-rice-primary-600 text-white px-4 py-2 rounded-md;
+    @apply focus:top-4 focus:left-4 z-50 focus:outline-none focus:ring-2 focus:ring-white;
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

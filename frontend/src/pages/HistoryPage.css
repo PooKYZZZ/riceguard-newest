@@ -7,7 +7,7 @@
   color: #fff;
   background:
     linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
-    url('G:\Downloads\riceguard\frontend\public\bg.jpg') no-repeat center center / cover;
+    url('/bg.jpg') no-repeat center center / cover;
   overflow-x: hidden;
 }
 

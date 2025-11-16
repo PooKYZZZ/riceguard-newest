@@ -31,10 +31,32 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 ```bash
 cd frontend
 npm install
-npm start        # Development server on port 3000
-npm run build    # Production build
+npm start        # Development server on port 3000 with Tailwind CSS
+npm run build    # Production build with optimized CSS
 npm test         # Run tests
 ```
+
+#### Tailwind CSS v3 Configuration
+The frontend uses Tailwind CSS v3 with a custom design system:
+
+**Key Configuration Files:**
+- `tailwind.config.js` - Custom theme with rice-themed colors
+- `postcss.config.js` - PostCSS setup for Tailwind processing
+- `craco.config.js` - Create React App override for Tailwind
+- `src/index.css` - Global styles and custom component classes
+
+**Design System:**
+- **Colors**: `rice-primary` (blue palette), `rice-secondary` (green palette), `disease-*` for status colors
+- **Animations**: Custom animations like `pulse-slow`, `bounce-gentle`, `spin-slow`
+- **Components**: Pre-built classes for buttons, cards, inputs, glass effects
+- **Accessibility**: Focus styles, screen reader support, keyboard navigation
+
+**Usage Guidelines:**
+- Use utility classes for rapid development
+- Leverage custom component classes in `index.css` for repeated patterns
+- Follow the rice-themed color scheme for consistency
+- Ensure all interactive elements have proper accessibility attributes
+- Test responsive design at all breakpoints
 
 ### Mobile App (Expo)
 ```bash
