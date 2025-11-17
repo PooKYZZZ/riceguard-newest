@@ -365,6 +365,141 @@
   .touch-target-large {
     @apply min-h-[60px] min-w-[60px];
   }
+
+  /* Farm field themed button system */
+  .btn-field {
+    @apply inline-flex items-center justify-center px-6 py-4 text-base font-semibold rounded-xl;
+    @apply transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rice-primary-500;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+    @apply min-h-[48px] min-w-[48px]; /* Touch-friendly minimum size */
+    @apply shadow-md hover:shadow-lg transform hover:-translate-y-px;
+  }
+
+  .btn-field-primary {
+    @apply btn-field bg-gradient-to-r from-rice-primary-600 to-rice-primary-700 text-white hover:from-rice-primary-700 hover:to-rice-primary-800;
+    @apply focus:ring-rice-primary-500 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-field-secondary {
+    @apply btn-field bg-white text-gray-700 border-2 border-gray-300 hover:bg-gray-50 hover:border-rice-primary-300 hover:text-rice-primary-700;
+    @apply focus:ring-rice-primary-500 shadow-sm hover:shadow-md;
+  }
+
+  .btn-field-success {
+    @apply btn-field bg-gradient-to-r from-outdoor-success to-green-600 text-white hover:from-green-600 hover:to-green-700;
+    @apply focus:ring-green-500 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-field-warning {
+    @apply btn-field bg-gradient-to-r from-outdoor-warning to-amber-600 text-white hover:from-amber-600 hover:to-amber-700;
+    @apply focus:ring-amber-500 shadow-lg hover:shadow-xl;
+  }
+
+  /* Farm field themed card system */
+  .card-field {
+    @apply bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-outdoor-shadow/20;
+    @apply p-8 transition-all duration-300 ease-in-out;
+    @apply hover:shadow-2xl hover:border-blue-400 hover:-translate-y-1;
+  }
+
+  .card-disease {
+    @apply card-field border-l-4;
+  }
+
+  .card-disease-healthy {
+    @apply card-disease border-l-disease-healthy bg-green-50/50;
+  }
+
+  .card-disease-warning {
+    @apply card-disease border-l-outdoor-warning bg-amber-50/50;
+  }
+
+  .card-disease-critical {
+    @apply card-disease border-l-disease-bacterial bg-red-50/50;
+  }
+
+  /* Border utility for 3px borders */
+  .border-3 {
+    border-width: 3px;
+  }
+
+  /* Additional responsive utilities */
+  .bounce-gentle {
+    animation: bounce-gentle 2s infinite;
+  }
+
+  @keyframes bounce-gentle {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  /* Enhanced upload area animations */
+  .animate-pulse-upload {
+    animation: pulseUpload 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulseUpload {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.02);
+    }
+  }
+
+  .animate-border-rotate {
+    animation: borderRotate 8s linear infinite;
+  }
+
+  @keyframes borderRotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-breathing {
+    animation: breathing 3s ease-in-out infinite;
+  }
+
+  @keyframes breathing {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-dash-border {
+    position: relative;
+  }
+
+  .animate-dash-border::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 4px dashed transparent;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #0ea5e9, #22c55e, #facc15, #0ea5e9) border-box;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: subtract;
+    animation: borderRotate 6s linear infinite;
+  }
+
+  /* Border utility for 4px borders */
+  .border-4 {
+    border-width: 4px;
+  }
 }
 
 /* Custom animations */
