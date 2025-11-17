@@ -27,8 +27,8 @@ const ProgressStepper = ({ currentStep }) => {
   ];
 
   return (
-    <div className="backdrop-blur-lg bg-white/60 rounded-xl border border-rice-secondary-200/50 p-4 mb-6">
-      <div className="flex items-center justify-between max-w-3xl mx-auto">
+    <div className="backdrop-blur-lg bg-white/60 rounded-xl border border-rice-secondary-200/50 p-3 mb-4">
+      <div className="flex items-center justify-between max-w-2xl mx-auto">
         {steps.map((step, index) => (
           <div key={step.id} className="flex items-center">
             {/* Step circle */}
@@ -192,9 +192,9 @@ const UploadZone = ({ onImageSelect, preview }) => {
         }
       }}
     >
-      <div className={`min-h-[350px] md:min-h-[400px] p-6 md:p-8 flex flex-col items-center justify-center`}>
+      <div className={`min-h-[300px] md:min-h-[350px] p-4 md:p-6 flex flex-col items-center justify-center`}>
         {preview ? (
-          <div className="relative w-full h-full min-h-[350px]">
+          <div className="relative w-full h-full min-h-[300px]">
             <img
               src={preview}
               alt="Uploaded rice leaf showing disease symptoms"
@@ -261,8 +261,8 @@ const UploadZone = ({ onImageSelect, preview }) => {
 const ResultsPanel = ({ result, isAnalyzing }) => {
   if (isAnalyzing) {
     return (
-      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-6">
-        <div className="text-center py-12">
+      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-4 md:p-6">
+        <div className="text-center py-8">
           <LoadingSpinner message="Analyzing Your Rice Leaf" />
           <div className="mt-6">
             <p className="text-lg text-rice-secondary-700">
@@ -300,7 +300,7 @@ const ResultsPanel = ({ result, isAnalyzing }) => {
   return (
     <div className="space-y-6">
       {/* Disease Status */}
-      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-6 text-center">
+      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-4 md:p-6 text-center">
         <div className={`inline-flex items-center px-4 py-2 rounded-full border-2 ${getStatusClass(diseaseStatus.type)}`}>
           <span className="text-2xl mr-2">{diseaseStatus.icon}</span>
           <span className="font-semibold">{result.disease}</span>
@@ -308,7 +308,7 @@ const ResultsPanel = ({ result, isAnalyzing }) => {
       </div>
 
       {/* Confidence Score */}
-      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-6">
+      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-4 md:p-6">
         <h3 className="text-lg font-bold text-rice-secondary-800 mb-4 flex items-center">
           <span className="text-2xl mr-2">📊</span>
           Confidence Level
@@ -335,7 +335,7 @@ const ResultsPanel = ({ result, isAnalyzing }) => {
       </div>
 
       {/* Recommendation */}
-      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-6">
+      <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-4 md:p-6">
         <h3 className="text-lg font-bold text-rice-secondary-800 mb-4 flex items-center">
           <span className="text-2xl mr-2">💡</span>
           Recommended Action
@@ -653,13 +653,13 @@ function ScanPage() {
           currentPage="scan"
         />
 
-        <main id="main-content" className="max-w-5xl xl:max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 py-6">
+        <main id="main-content" className="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6 py-6">
           {/* Progress Stepper */}
           <ProgressStepper currentStep={getCurrentStep()} />
 
-          <div className="backdrop-blur-xl bg-white/80 rounded-2xl shadow-2xl border border-rice-secondary-200/50 p-6 mb-6">
+          <div className="backdrop-blur-xl bg-white/80 rounded-2xl shadow-2xl border border-rice-secondary-200/50 p-4 md:p-6 mb-6">
           {/* Page Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <div className="flex items-center justify-center mb-4">
               <span className="text-4xl mr-3 animate-bounce-gentle">🌾</span>
               <h1 className="text-2xl md:text-3xl font-bold text-rice-secondary-800">
@@ -692,9 +692,9 @@ function ScanPage() {
           )}
 
           {/* Main Content Grid - Responsive Layout */}
-          <div className="grid xl:grid-cols-2 gap-6 lg:gap-4">
+          <div className="grid lg:grid-cols-2 gap-4">
             {/* Upload Section */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold text-rice-secondary-800 mb-4 flex items-center">
                   <span className="text-2xl md:text-3xl mr-2">📷</span>
@@ -750,7 +750,7 @@ function ScanPage() {
               )}
 
               {/* Quick Tips with rice theme */}
-              <div className="backdrop-blur-lg bg-rice-secondary-50/80 rounded-xl p-6 border border-rice-secondary-200/50">
+              <div className="backdrop-blur-lg bg-rice-secondary-50/80 rounded-xl p-4 border border-rice-secondary-200/50">
                 <h3 className="text-lg font-bold text-rice-secondary-800 mb-4 flex items-center">
                   <span className="text-2xl mr-2">💡</span>
                   Tips for Best Results
@@ -785,7 +785,7 @@ function ScanPage() {
               <ResultsPanel result={result} isAnalyzing={loading} />
 
               {!result && !loading && (
-                <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-12 text-center">
+                <div className="backdrop-blur-xl bg-white/80 rounded-xl shadow-2xl border border-rice-secondary-200/50 p-8 text-center">
                   <div className="text-6xl text-rice-secondary-300 mb-4">🔍</div>
                   <h3 className="text-xl font-bold text-rice-secondary-800 mb-2">
                     Ready for Analysis
@@ -799,7 +799,7 @@ function ScanPage() {
           </div>
 
           {/* Keyboard Shortcuts Help with rice theme */}
-          <div className="mt-12 text-center">
+          <div className="mt-8 text-center">
             <details className="inline-block text-left">
               <summary className="cursor-pointer text-sm text-rice-secondary-500 hover:text-rice-secondary-700 transition-colors duration-200">
                 Keyboard shortcuts
